@@ -5,9 +5,11 @@ namespace Assets.Scripts
     class FlappyPlayer : MonoBehaviour
     {
         [SerializeField] private float flapForce = 10;
+        [SerializeField] private float rotationMultiplier = 1;
         [SerializeField] private float minY = -10;
         [SerializeField] private float maxY = 10;
         [SerializeField] private float disableY = 20;
+        [SerializeField] private Sprite[] birds = null;
 
         private Score score = new Score();
 
@@ -58,9 +60,20 @@ namespace Assets.Scripts
             }
         }
 
+        private void PickRandomBird()
+        {
+            if (birds != null && birds.Length > 0)
+            {
+                int randNum = Random.Range(0, birds.Length);
+                GetComponent<SpriteRenderer>().sprite = birds[randNum];
+            }
+        }
+
         private void Awake()
         {
             GetComponent<Rigidbody2D>().isKinematic = true;
+
+            PickRandomBird();
         }
         private void Update()
         {
@@ -68,6 +81,8 @@ namespace Assets.Scripts
 
             if (GameController.SINGLETON.IsPlaying && transform.position.y <= minY) GameController.SINGLETON.EndGame();
             if (transform.position.y < disableY) gameObject.SetActive(false);
+
+            transform.eulerAngles = new Vector3(0, 0, GetComponent<Rigidbody2D>().velocity.y * rotationMultiplier);
         }
     }
 }

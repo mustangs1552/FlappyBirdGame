@@ -4,6 +4,11 @@ namespace Assets.Scripts
 {
     class FlappyPlayer : MonoBehaviour
     {
+        [SerializeField] private float flapForce = 10;
+        [SerializeField] private float minY = -10;
+        [SerializeField] private float maxY = 10;
+        [SerializeField] private float disableY = 20;
+
         private Score score = new Score();
 
         public int GetScore
@@ -12,6 +17,57 @@ namespace Assets.Scripts
             {
                 return score.Amount;
             }
+        }
+
+        public void StartGame()
+        {
+            GetComponent<Rigidbody2D>().isKinematic = false;
+            Flap();
+        }
+        public void PauseGame()
+        {
+            GetComponent<Rigidbody2D>().isKinematic = true;
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
+        public void Die()
+        {
+            GetComponent<Rigidbody2D>().velocity = Vector2.up * flapForce;
+            Destroy(GetComponent<Collider2D>());
+        }
+
+        private void Flap()
+        {
+            if (GameController.SINGLETON.IsPlaying && transform.position.y <= maxY && (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Jump")))
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.up * flapForce;
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if(GameController.SINGLETON.IsPlaying && collision.gameObject.tag == "ScoreTrigger")
+            {
+                score.Amount++;
+            }
+        }
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if(GameController.SINGLETON.IsPlaying && collision.gameObject.tag == "Hazard")
+            {
+                GameController.SINGLETON.EndGame();
+            }
+        }
+
+        private void Awake()
+        {
+            GetComponent<Rigidbody2D>().isKinematic = true;
+        }
+        private void Update()
+        {
+            Flap();
+
+            if (GameController.SINGLETON.IsPlaying && transform.position.y <= minY) GameController.SINGLETON.EndGame();
+            if (transform.position.y < disableY) gameObject.SetActive(false);
         }
     }
 }

@@ -36,12 +36,12 @@ namespace Assets.Scripts
         }
         private void MoveLeft()
         {
-            if (speed != -1)
+            if (GameController.SINGLETON.IsPlaying && speed != -1)
             {
                 transform.Translate(Vector3.left * speed * Time.deltaTime);
                 CheckBoundries();
             }
-            else Debug.LogError("No speed set!");
+            else if(speed == -1) Debug.LogError("No speed set!");
         }
 
         private void OnEnable()

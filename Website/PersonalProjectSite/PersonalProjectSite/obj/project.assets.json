@@ -5452,7 +5452,7 @@
       ]
     },
     "Microsoft.AspNetCore.Razor.Design/2.1.1": {
-      "sha512": "BOK5fckW9v7xWjpEI6bPGwkjw10OPVASZcAa8HoWJo/0Mmg4Azddj92v8noU+YgvD/6zNZ9o/RiRXXKxk5rYwQ==",
+      "sha512": "f8PKGcxiezL1RVqmnmrazj24Mj4KCTSXqwdotl7Lc+82h8iLV7ItxEIShTJakG7M9iw0ZuCocM0J/IhYesdQrg==",
       "type": "package",
       "path": "microsoft.aspnetcore.razor.design/2.1.1",
       "files": [
@@ -12218,23 +12218,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\musta\\.nuget\\packages\\": {},
+    "C:\\Users\\Matthew George\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SourcetreeProjects\\FlappyBirdGame\\Website\\PersonalProjectSite\\PersonalProjectSite\\PersonalProjectSite.csproj",
+      "projectUniqueName": "C:\\Users\\Matthew George\\Documents\\Workspace\\PersonalProject\\FlappyBirdGame\\Website\\PersonalProjectSite\\PersonalProjectSite\\PersonalProjectSite.csproj",
       "projectName": "PersonalProjectSite",
-      "projectPath": "D:\\SourcetreeProjects\\FlappyBirdGame\\Website\\PersonalProjectSite\\PersonalProjectSite\\PersonalProjectSite.csproj",
-      "packagesPath": "C:\\Users\\musta\\.nuget\\packages\\",
-      "outputPath": "D:\\SourcetreeProjects\\FlappyBirdGame\\Website\\PersonalProjectSite\\PersonalProjectSite\\obj\\",
+      "projectPath": "C:\\Users\\Matthew George\\Documents\\Workspace\\PersonalProject\\FlappyBirdGame\\Website\\PersonalProjectSite\\PersonalProjectSite\\PersonalProjectSite.csproj",
+      "packagesPath": "C:\\Users\\Matthew George\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Matthew George\\Documents\\Workspace\\PersonalProject\\FlappyBirdGame\\Website\\PersonalProjectSite\\PersonalProjectSite\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\musta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Matthew George\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

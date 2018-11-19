@@ -17,10 +17,19 @@ CREATE TABLE Games
 (
 	gameID int Identity NOT NULL,
 	gameName varchar(50) NOT NULL,
-	gameType varchar(50) NULL,
+	gameTypeID int NULL,
 	gameDiscription varchar(255) NULL,
+	gameSrc varchar(255) NOT NULL,
 
 	CONSTRAINT pk_Games_gameID PRIMARY KEY (gameID),
+);
+
+CREATE TABLE GameTypes
+(
+	typeID int Identity NOT NULL,
+	name varchar(50) NOT NULL,
+
+	CONSTRAINT pk_GameTypes_typeID PRIMARY KEY(typeID),
 );
 
 Create TABLE Reviews
@@ -32,7 +41,7 @@ Create TABLE Reviews
 	reviewScore int NOT NULL
 	
 	CONSTRAINT pk_Reviews_reviewID PRIMARY KEY (reviewID),
-	CONSTRAINT pk_Reviews_gameID FOREIGN KEY (gameID) REFERENCES Games(gameID),
+	CONSTRAINT fk_Reviews_gameID FOREIGN KEY (gameID) REFERENCES Games(gameID),
 );
 
 CREATE TABLE HighScores
@@ -43,25 +52,16 @@ CREATE TABLE HighScores
 	score int NOT NULL
 	
 	CONSTRAINT pk_HighScores_scoreID PRIMARY KEY (scoreID),
-	CONSTRAINT pk_HighScores_gameID FOREIGN KEY (gameID) REFERENCES Games(gameID),
+	CONSTRAINT fk_HighScores_gameID FOREIGN KEY (gameID) REFERENCES Games(gameID),
 );
 
-CREATE TABLE Games_Reviews
+CREATE TABLE Games_GameTypes
 (
 	gameID int NOT NULL,
-	reviewID int NOT NULL
+	typeID int NOT NULL,
 	
-	CONSTRAINT fk_Games_Reviews_gameID FOREIGN KEY (gameID) REFERENCES Games(gameID),
-	CONSTRAINT fk_Games_Reviews_reviewID FOREIGN KEY (reviewID) REFERENCES Games(gameID),
-);
-
-CREATE TABLE Games_HighScores
-(
-	gameID int NOT NULL,
-	highscoreID int NOT NULL
-	
-	CONSTRAINT fk_Games_HighScores_gameID FOREIGN KEY (gameID) REFERENCES Games(gameID),
-	CONSTRAINT fk_Games_HighScores_highscoreID FOREIGN KEY (highscoreID) REFERENCES Games(gameID),
+	CONSTRAINT fk_Games_GameTypes_gameID FOREIGN KEY (gameID) REFERENCES Games(gameID),
+	CONSTRAINT fk_Games_GameTypes_typeID FOREIGN KEY (typeID) REFERENCES GameTypes(typeID),
 );
 
 COMMIT TRANSACTION;

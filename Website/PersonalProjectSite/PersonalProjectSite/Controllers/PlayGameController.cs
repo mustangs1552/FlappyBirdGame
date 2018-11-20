@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PersonalProjectSite.Models;
+using PersonalProjectSite.Models.DALs;
 
 namespace PersonalProjectSite.Controllers
 {
     public class PlayGameController : Controller
     {
-        public IActionResult Index()
+        private const string connString = @"Data Source=.\SQLEXPRESS;Initial Catalog=PersonalGameSite;Integrated Security=true;";
+
+        public IActionResult Index(int id)
         {
-            return View();
+            GamesDAL dal = new GamesDAL(connString);
+            return View(dal.GetGame(id));
         }
     }
 }

@@ -47,10 +47,6 @@ D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProject
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.TagHelpers.input.cache
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.TagHelpers.output.cache
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.RazorCoreGenerate.cache
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Home\About.g.cshtml.cs
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Home\Contact.g.cshtml.cs
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Home\Index.g.cshtml.cs
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Home\Privacy.g.cshtml.cs
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Shared\Error.g.cshtml.cs
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_CookieConsentPartial.g.cshtml.cs
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_Layout.g.cshtml.cs
@@ -63,6 +59,11 @@ D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProject
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.dll
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.pdb
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.csproj.CopyComplete
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\FlappyBirdGame\Index_EMBED.g.cshtml.cs
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\FlappyBirdGame\Index.g.cshtml.cs
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\bin\Debug\netcoreapp2.1\wwwroot\FlappyBirdGame\Build\WebGL.json
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\PlayGame\Index.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\PlayGame\Index_INTERNAL.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\About.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\Contact.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\Index.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\Privacy.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Home\Index.g.cshtml.cs

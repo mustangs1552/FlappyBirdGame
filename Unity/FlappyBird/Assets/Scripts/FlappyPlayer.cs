@@ -72,7 +72,8 @@ namespace Assets.Scripts
         private void Awake()
         {
             GetComponent<Rigidbody2D>().isKinematic = true;
-            score = gameObject.AddComponent<Score>();
+            score = GetComponent<Score>();
+            if (score == null) Debug.LogError("No score object found!");
 
             PickRandomBird();
         }

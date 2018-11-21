@@ -7,8 +7,10 @@ namespace Assets.Scripts
 {
     public class Score : MonoBehaviour
     {
+        public string uploadScoreURL = "";
+        public uint serverGameID = 0;
+
         private int amount = 0;
-        private const string URL_UPLOAD_SCORE = "";
 
         public int Amount
         {
@@ -25,7 +27,14 @@ namespace Assets.Scripts
 
         public void StartUploadScore(string username)
         {
-            StartCoroutine("UploadScore", username);
+            if(uploadScoreURL == null || uploadScoreURL == "")
+            {
+                Debug.LogError("No high score URL set!");
+            }
+            else
+            {
+                StartCoroutine("UploadScore", username);
+            }
         }
 
         private IEnumerator UploadScore(string username)
@@ -34,7 +43,7 @@ namespace Assets.Scripts
             formData.Add(new MultipartFormDataSection("username=" + username));
             formData.Add(new MultipartFormDataSection("score=" + amount));
 
-            UnityWebRequest www = UnityWebRequest.Post(URL_UPLOAD_SCORE, formData);
+            UnityWebRequest www = UnityWebRequest.Post(uploadScoreURL, formData);
             Debug.Log("Uploading score...");
             yield return www.SendWebRequest();
 

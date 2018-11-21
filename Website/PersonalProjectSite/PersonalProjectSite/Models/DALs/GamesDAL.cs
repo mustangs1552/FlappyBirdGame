@@ -26,7 +26,7 @@ namespace PersonalProjectSite.Models.DALs
             return PerformSQL();
         }
 
-        public GamesModel GetGame(int id)
+        public GamesModel GetGame(uint id)
         {
             Dictionary<string, Object> parameters = new Dictionary<string, object>()
             {
@@ -102,9 +102,9 @@ namespace PersonalProjectSite.Models.DALs
             while(reader.Read())
             {
                 GamesModel model = new GamesModel();
-                model.GameID = Convert.ToInt32(reader["gameID"]);
+                model.GameID = Convert.ToUInt32(reader["gameID"]);
                 model.GameName = Convert.ToString(reader["gameName"]);
-                model.GameType = Convert.ToInt32(reader["gameTypeID"]);
+                model.GameType = Convert.ToUInt32(reader["gameTypeID"]);
                 model.GameDescription = Convert.ToString(reader["gameDiscription"]);
                 model.GameSrc = Convert.ToString(reader["gameSrc"]);
                 output.Add(model);

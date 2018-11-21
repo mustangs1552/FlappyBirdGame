@@ -9,7 +9,7 @@ namespace PersonalProjectSiteTests
     [TestClass]
     public class GamesDALTests
     {
-        private const string connString = @"Data Source=.\SQLEXPRESS;Initial Catalog=PersonalGameSite;Integrated Security=true;";
+        private const string connString = @"Data Source=.\SQLEXPRESS;Initial Catalog=PersonalGameSite_TEST;Integrated Security=true;";
         private TransactionScope trans = null;
         private IGamesDAL dal = null;
 

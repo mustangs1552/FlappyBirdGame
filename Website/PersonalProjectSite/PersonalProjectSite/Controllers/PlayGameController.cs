@@ -11,7 +11,9 @@ namespace PersonalProjectSite.Controllers
         public IActionResult Index(int id)
         {
             GamesDAL dal = new GamesDAL(connString);
-            return View(dal.GetGame(id));
+            GamesModel model = dal.GetGame(id);
+            model.HighScores = new HighScoresDAL(connString).GetAllHighScores(model.GameID, 10);
+            return View(model);
         }
     }
 }

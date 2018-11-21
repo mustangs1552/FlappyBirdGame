@@ -7,7 +7,9 @@ namespace PersonalProjectSite.Models.DALs
     {
         List<HighScoresModel> GetAllHighScores();
         List<HighScoresModel> GetAllHighScores(int id);
+        List<HighScoresModel> GetAllHighScores(int id, int topX);
         List<HighScoresModel> GetAllHighScores(string name);
+        List<HighScoresModel> GetAllHighScores(string name, int topX);
         int AddHighScore(HighScoresModel model);
     }
 }

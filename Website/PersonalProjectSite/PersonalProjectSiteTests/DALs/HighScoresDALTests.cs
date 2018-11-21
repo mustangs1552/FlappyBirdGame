@@ -117,5 +117,46 @@ namespace PersonalProjectSiteTests
 
             Assert.IsNotNull(scores);
         }
+
+        [TestMethod]
+        public void GetTopXHighScoresByNameTest()
+        {
+            HighScoresModel model = new HighScoresModel()
+            {
+                GameID = gamesDAL.GetGame("TestNameThree").GameID,
+                ScoreUsername = "User",
+                Score = 5
+            };
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+
+            List<HighScoresModel> scores = hsDAL.GetAllHighScores("TestNameThree", 3);
+
+            Assert.IsNotNull(scores);
+            Assert.AreEqual(3, scores.Count);
+        }
+        [TestMethod]
+        public void GetTopXHighScoresByIDTest()
+        {
+            HighScoresModel model = new HighScoresModel()
+            {
+                GameID = gamesDAL.GetGame("TestNameThree").GameID,
+                ScoreUsername = "User",
+                Score = 5
+            };
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+            hsDAL.AddHighScore(model);
+
+            List<HighScoresModel> scores = hsDAL.GetAllHighScores(gamesDAL.GetGame("TestNameThree").GameID, 3);
+
+            Assert.IsNotNull(scores);
+            Assert.AreEqual(3, scores.Count);
+        }
     }
 }

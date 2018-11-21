@@ -90,7 +90,7 @@ namespace PersonalProjectSite.Models.DALs
             return rowsAffected;
         }
 
-        #region Private
+        #region SQL
         /// <summary>
         /// Populates a list of models via the SqlDataReader provided.
         /// </summary>

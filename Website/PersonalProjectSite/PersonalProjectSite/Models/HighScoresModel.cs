@@ -2,8 +2,8 @@
 {
     public class HighScoresModel
     {
-        public int ScoreID { get; set; }
-        public int GameID { get; set; }
+        public uint ScoreID { get; set; }
+        public uint GameID { get; set; }
         public string ScoreUsername { get; set; }
         public int Score { get; set; }
     }

@@ -3,6 +3,25 @@
     ViewData["Title"] = Model.GameName;
 }
 
-<h2>@Model.GameName</h2>
+<h1>@Model.GameName</h1>
 <iframe src="@Model.GameSrc" style="width:960px;height:600px;border:0"></iframe>
 <div>@Model.GameDescription</div>
+<div>
+    <h3>High Scores</h3>
+    @{
+        if (Model.HighScores == null || Model.HighScores.Count == 0)
+        {
+            <div>No High Scores, be the first one!</div>
+        }
+        else
+        {
+            foreach (HighScoresModel score in Model.HighScores)
+            {
+                <div>
+                    <span>@score.ScoreUsername</span>
+                    <span>@score.Score</span>
+                </div>
+            }
+        }
+    }
+</div>

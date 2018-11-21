@@ -10,7 +10,9 @@ namespace PersonalProjectSite.Models.DALs
         private string connString = "";
         private const string SQL_GET_ALL = "SELECT * FROM HighScores;";
         private const string SQL_GET_GAME_ID = "SELECT * FROM HighScores WHERE gameID = @gameID;";
+        private const string SQL_GET_GAME_ID_TOPX = "SELECT TOP (@topX) * FROM HighScores WHERE gameID = @gameID;";
         private const string SQL_GET_GAME_NAME = "SELECT * FROM HighScores JOIN Games ON HighScores.gameID = Games.gameID WHERE Games.gameName = @gameName;";
+        private const string SQL_GET_GAME_NAME_TOPX = "SELECT TOP (@topX) * FROM HighScores JOIN Games ON HighScores.gameID = Games.gameID WHERE Games.gameName = @gameName;";
         private const string SQL_ADD_HIGHSCORE = "INSERT INTO HighScores VALUES(@gameID, @scoreUsername, @score);";
 
         public HighScoresDAL(string connectionString)
@@ -30,6 +32,15 @@ namespace PersonalProjectSite.Models.DALs
             };
             return PerformSQL(SQL_GET_GAME_ID, parameters);
         }
+        public List<HighScoresModel> GetAllHighScores(int id, int topX)
+        {
+            Dictionary<string, Object> parameters = new Dictionary<string, object>()
+            {
+                {"@topX", topX},
+                {"@gameID", id}
+            };
+            return PerformSQL(SQL_GET_GAME_ID_TOPX, parameters);
+        }
         public List<HighScoresModel> GetAllHighScores(string name)
         {
             if(name == null)
@@ -42,6 +53,20 @@ namespace PersonalProjectSite.Models.DALs
                 {"@gameName", name}
             };
             return PerformSQL(SQL_GET_GAME_NAME, parameters);
+        }
+        public List<HighScoresModel> GetAllHighScores(string name, int topX)
+        {
+            if (name == null)
+            {
+                return new List<HighScoresModel>();
+            }
+
+            Dictionary<string, Object> parameters = new Dictionary<string, object>()
+            {
+                {"@topX", topX},
+                {"@gameName", name}
+            };
+            return PerformSQL(SQL_GET_GAME_NAME_TOPX, parameters);
         }
 
         public int AddHighScore(HighScoresModel model)
@@ -67,7 +92,7 @@ namespace PersonalProjectSite.Models.DALs
             return rowsAffected;
         }
 
-        #region Private
+        #region SQL
         /// <summary>
         /// Populates a list of models via the SqlDataReader provided.
         /// </summary>

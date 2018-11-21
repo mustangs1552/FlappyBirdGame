@@ -70,7 +70,7 @@ using PersonalProjectSite.Models;
             WriteLiteral("            ");
             EndContext();
             BeginContext(166, 75, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "96f5fece4af3411fbc210ad3aae7da0a", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ad8cc4e4de0f43798e7bd2ec5f052185", async() => {
                 BeginContext(224, 13, false);
 #line 11 "D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\Views\Home\Index.cshtml"
                                                                 Write(game.GameName);

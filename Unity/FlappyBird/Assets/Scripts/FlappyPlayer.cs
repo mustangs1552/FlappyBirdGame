@@ -11,7 +11,7 @@ namespace Assets.Scripts
         [SerializeField] private float disableY = 20;
         [SerializeField] private Sprite[] birds = null;
 
-        private Score score = new Score();
+        private Score score = null;
 
         public int GetScore
         {
@@ -72,6 +72,7 @@ namespace Assets.Scripts
         private void Awake()
         {
             GetComponent<Rigidbody2D>().isKinematic = true;
+            score = gameObject.AddComponent<Score>();
 
             PickRandomBird();
         }

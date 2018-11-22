@@ -24,7 +24,7 @@ namespace PersonalProjectSite.Models.DALs
         {
             return PerformSQL();
         }
-        public List<HighScoresModel> GetAllHighScores(uint id)
+        public List<HighScoresModel> GetAllHighScores(int id)
         {
             Dictionary<string, Object> parameters = new Dictionary<string, object>()
             {
@@ -32,7 +32,7 @@ namespace PersonalProjectSite.Models.DALs
             };
             return PerformSQL(SQL_GET_GAME_ID, parameters);
         }
-        public List<HighScoresModel> GetAllHighScores(uint id, uint topX)
+        public List<HighScoresModel> GetAllHighScores(int id, int topX)
         {
             Dictionary<string, Object> parameters = new Dictionary<string, object>()
             {
@@ -54,7 +54,7 @@ namespace PersonalProjectSite.Models.DALs
             };
             return PerformSQL(SQL_GET_GAME_NAME, parameters);
         }
-        public List<HighScoresModel> GetAllHighScores(string name, uint topX)
+        public List<HighScoresModel> GetAllHighScores(string name, int topX)
         {
             if (name == null)
             {
@@ -104,7 +104,7 @@ namespace PersonalProjectSite.Models.DALs
             while (reader.Read())
             {
                 HighScoresModel model = new HighScoresModel();
-                model.GameID = Convert.ToUInt32(reader["gameID"]);
+                model.GameID = Convert.ToInt32(reader["gameID"]);
                 model.ScoreUsername = Convert.ToString(reader["scoreUsername"]);
                 model.Score = Convert.ToInt32(reader["score"]);
                 output.Add(model);

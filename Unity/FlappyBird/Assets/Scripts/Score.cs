@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Assets.Scripts
 {
@@ -43,12 +44,32 @@ namespace Assets.Scripts
             formData.Add(new MultipartFormDataSection("username=" + username));
             formData.Add(new MultipartFormDataSection("score=" + amount));
 
-            UnityWebRequest www = UnityWebRequest.Post(uploadScoreURL, formData);
-            Debug.Log("Uploading score...");
-            yield return www.SendWebRequest();
+            using (UnityWebRequest www = UnityWebRequest.Post(uploadScoreURL, formData))
+            {
+                www.certificateHandler = new AcceptAllSelfSignedCerts();
+                Debug.Log("Uploading score...");
+                yield return www.SendWebRequest();
 
-            if (www.isNetworkError || www.isHttpError) Debug.LogError("Error while uploading score: " + www.error);
-            else Debug.Log("Uploaded score!");
+                if (www.isNetworkError || www.isHttpError)
+                {
+                    Debug.LogError("Error while uploading score: " + www.error + "\n\tURL: " + www.url);
+                }
+                else Debug.Log("Uploaded score!");
+            }
         }
+    }
+}
+
+public class AcceptAllSelfSignedCerts : CertificateHandler
+{
+    public static string PUBLIC_KEY = "PublicKey";
+
+    protected override bool ValidateCertificate(byte[] certificateData)
+    {
+        X509Certificate2 cert = new X509Certificate2(certificateData);
+        string pk = cert.GetPublicKeyString();
+        if (pk.ToLower().Equals(PUBLIC_KEY.ToLower())) return true;
+
+        return false;
     }
 }

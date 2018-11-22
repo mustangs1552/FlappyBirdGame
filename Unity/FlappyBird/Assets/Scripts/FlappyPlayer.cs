@@ -37,6 +37,11 @@ namespace Assets.Scripts
             Destroy(GetComponent<Collider2D>());
         }
 
+        public void UploadScore(string username)
+        {
+            score.StartUploadScore(username);
+        }
+
         private void Flap()
         {
             if (GameController.SINGLETON.IsPlaying && transform.position.y <= maxY && (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Jump")))
@@ -82,9 +87,14 @@ namespace Assets.Scripts
             Flap();
 
             if (GameController.SINGLETON.IsPlaying && transform.position.y <= minY) GameController.SINGLETON.EndGame();
-            if (transform.position.y < disableY) gameObject.SetActive(false);
-
-            transform.eulerAngles = new Vector3(0, 0, GetComponent<Rigidbody2D>().velocity.y * rotationMultiplier);
+            if (transform.position.y < disableY)
+            {
+                Destroy(gameObject.GetComponent<Rigidbody2D>());
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 0, GetComponent<Rigidbody2D>().velocity.y * rotationMultiplier);
+            }
         }
     }
 }

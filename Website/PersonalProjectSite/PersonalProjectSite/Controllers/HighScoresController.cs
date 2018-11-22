@@ -8,7 +8,8 @@ namespace PersonalProjectSite.Controllers
     {
         private const string connString = @"Data Source=.\SQLEXPRESS;Initial Catalog=PersonalGameSite;Integrated Security=true;";
 
-        public IActionResult SaveNewScore(uint gameID, string username, int score)
+        [HttpPost]
+        public IActionResult SaveNewScore(int gameID, string username, int score)
         {
             HighScoresDAL dal = new HighScoresDAL(connString);
             HighScoresModel model = new HighScoresModel()

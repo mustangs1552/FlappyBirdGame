@@ -5,3 +5,4 @@ Unity/FlappyBird/Builds/
 Unity/FlappyBird/*.csproj
 Unity/FlappyBird/*.sln
 Unity/FlappyBird/Temp/
+Unity/FlappyBird/obj/

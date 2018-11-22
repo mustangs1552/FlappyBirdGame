@@ -56,6 +56,11 @@ namespace Assets.Scripts
             uiManager.ShowEndScreen();
         }
 
+        public void UploadPlayerScore(string username)
+        {
+            player.UploadScore(username);
+        }
+
         public void ReloadLvl()
         {
             SceneManager.LoadScene(0);

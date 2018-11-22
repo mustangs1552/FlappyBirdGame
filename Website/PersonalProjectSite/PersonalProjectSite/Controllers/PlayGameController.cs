@@ -8,7 +8,7 @@ namespace PersonalProjectSite.Controllers
     {
         private const string connString = @"Data Source=.\SQLEXPRESS;Initial Catalog=PersonalGameSite;Integrated Security=true;";
 
-        public IActionResult Index(uint id)
+        public IActionResult Index(int id)
         {
             GamesDAL dal = new GamesDAL(connString);
             GamesModel model = dal.GetGame(id);

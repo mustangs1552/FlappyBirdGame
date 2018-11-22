@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab155c7cde89e14599f434784536d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  URL_UPLOAD_SCORE: 
-  serverGameID: 0
+  uploadScoreURL: https://localhost:44390/HighScores/SaveNewScore/
+  serverGameID: 95
 --- !u!212 &212456050507670362
 SpriteRenderer:
   m_ObjectHideFlags: 1

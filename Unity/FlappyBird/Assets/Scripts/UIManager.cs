@@ -8,6 +8,8 @@ namespace Assets.Scripts
         [SerializeField] private GameObject startScreen = null;
         [SerializeField] private GameObject endScreen = null;
         [SerializeField] private Text score = null;
+        [SerializeField] private InputField inputField = null;
+        [SerializeField] private Button inputFieldButton = null;
 
         public void HideScreens()
         {
@@ -23,6 +25,16 @@ namespace Assets.Scripts
         {
             HideScreens();
             endScreen.SetActive(true);
+        }
+
+        public void SaveHighScore()
+        {
+            if (inputField.text != null || inputField.text != "")
+            {
+                GameController.SINGLETON.UploadPlayerScore(inputField.text);
+                inputField.enabled = false;
+                inputFieldButton.enabled = false;
+            }
         }
 
         private void Update()

@@ -4,9 +4,9 @@ namespace PersonalProjectSite.Models
 {
     public class GamesModel
     {
-        public uint GameID { get; set; }
+        public int GameID { get; set; }
         public string GameName { get; set; }
-        public uint GameType { get; set; }
+        public int GameType { get; set; }
         public string GameDescription { get; set; }
         public string GameSrc { get; set; }
 

@@ -9,17 +9,18 @@ namespace PersonalProjectSite.Controllers
         private const string connString = @"Data Source=.\SQLEXPRESS;Initial Catalog=PersonalGameSite;Integrated Security=true;";
 
         [HttpPost]
-        public IActionResult SaveNewScore(int gameID, string username, int score)
+        public IActionResult SaveNewScore(string gameID, string username, string score)
         {
             HighScoresDAL dal = new HighScoresDAL(connString);
             HighScoresModel model = new HighScoresModel()
             {
-                GameID = gameID,
+                GameID = int.Parse(gameID),
                 ScoreUsername = username,
-                Score = score,
+                Score = int.Parse(score),
             };
-            dal.AddHighScore(model);
-            return View();
+
+            if (dal.AddHighScore(model) > 0) return StatusCode(200);
+            else return StatusCode(300);
         }
     }
 }

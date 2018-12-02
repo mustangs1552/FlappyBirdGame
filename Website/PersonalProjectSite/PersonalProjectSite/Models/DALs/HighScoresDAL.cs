@@ -8,11 +8,11 @@ namespace PersonalProjectSite.Models.DALs
     public class HighScoresDAL : IHighScoresDAL
     {
         private string connString = "";
-        private const string SQL_GET_ALL = "SELECT * FROM HighScores;";
-        private const string SQL_GET_GAME_ID = "SELECT * FROM HighScores WHERE gameID = @gameID;";
-        private const string SQL_GET_GAME_ID_TOPX = "SELECT TOP (@topX) * FROM HighScores WHERE gameID = @gameID;";
-        private const string SQL_GET_GAME_NAME = "SELECT * FROM HighScores JOIN Games ON HighScores.gameID = Games.gameID WHERE Games.gameName = @gameName;";
-        private const string SQL_GET_GAME_NAME_TOPX = "SELECT TOP (@topX) * FROM HighScores JOIN Games ON HighScores.gameID = Games.gameID WHERE Games.gameName = @gameName;";
+        private const string SQL_GET_ALL = "SELECT * FROM HighScores ORDER BY HighScores.score DESC;";
+        private const string SQL_GET_GAME_ID = "SELECT * FROM HighScores WHERE gameID = @gameID ORDER BY HighScores.score DESC;";
+        private const string SQL_GET_GAME_ID_TOPX = "SELECT TOP (@topX) * FROM HighScores WHERE gameID = @gameID ORDER BY HighScores.score DESC;";
+        private const string SQL_GET_GAME_NAME = "SELECT * FROM HighScores JOIN Games ON HighScores.gameID = Games.gameID WHERE Games.gameName = @gameName ORDER BY HighScores.score DESC;";
+        private const string SQL_GET_GAME_NAME_TOPX = "SELECT TOP (@topX) * FROM HighScores JOIN Games ON HighScores.gameID = Games.gameID WHERE Games.gameName = @gameName ORDER BY HighScores.score DESC;";
         private const string SQL_ADD_HIGHSCORE = "INSERT INTO HighScores VALUES(@gameID, @scoreUsername, @score);";
 
         public HighScoresDAL(string connectionString)

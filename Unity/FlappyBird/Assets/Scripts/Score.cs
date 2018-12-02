@@ -8,7 +8,8 @@ namespace Assets.Scripts
 {
     public class Score : MonoBehaviour
     {
-        public string uploadScoreURL = "";
+        public string rootDomainURL = "https://localhost:44390/";
+        public string uploadScoreURL = "HighScores/SaveNewScore";
         public uint serverGameID = 0;
 
         private int amount = 0;
@@ -36,17 +37,20 @@ namespace Assets.Scripts
             {
                 StartCoroutine("UploadScore", username);
             }
+
+            PlayerPrefs.SetString("latestUsername", username);
         }
 
         private IEnumerator UploadScore(string username)
         {
             List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-            formData.Add(new MultipartFormDataSection("username=" + username));
-            formData.Add(new MultipartFormDataSection("score=" + amount));
-
-            using (UnityWebRequest www = UnityWebRequest.Post(uploadScoreURL, formData))
+            formData.Add(new MultipartFormDataSection("gameID", serverGameID.ToString()));
+            formData.Add(new MultipartFormDataSection("username", username));
+            formData.Add(new MultipartFormDataSection("score", amount.ToString()));
+            
+            using (UnityWebRequest www = UnityWebRequest.Post(rootDomainURL + uploadScoreURL, formData))
             {
-                www.certificateHandler = new AcceptAllSelfSignedCerts();
+                //www.certificateHandler = new AcceptAllSelfSignedCerts();
                 Debug.Log("Uploading score...");
                 yield return www.SendWebRequest();
 

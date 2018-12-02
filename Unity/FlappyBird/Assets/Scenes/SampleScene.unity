@@ -230,7 +230,12 @@ Prefab:
     - target: {fileID: 114742459673520108, guid: 53f51cc6d4a63e5469916ca842c1863b,
         type: 2}
       propertyPath: uploadScoreURL
-      value: https://localhost:44390/HighScores/SaveNewScore
+      value: HighScores/SaveNewScore
+      objectReference: {fileID: 0}
+    - target: {fileID: 114742459673520108, guid: 53f51cc6d4a63e5469916ca842c1863b,
+        type: 2}
+      propertyPath: rootDomainURL
+      value: http://localhost:56603/
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53f51cc6d4a63e5469916ca842c1863b, type: 2}

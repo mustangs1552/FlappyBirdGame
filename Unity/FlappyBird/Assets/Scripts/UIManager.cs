@@ -24,6 +24,10 @@ namespace Assets.Scripts
         public void ShowEndScreen()
         {
             HideScreens();
+            if(PlayerPrefs.HasKey("latestUsername"))
+            {
+                inputField.text = PlayerPrefs.GetString("latestUsername");
+            }
             endScreen.SetActive(true);
         }
 

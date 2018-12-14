@@ -17,4 +17,3 @@ D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProject
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSiteTests\obj\Debug\netcoreapp2.1\PersonalProjectSiteTests.csproj.CopyComplete
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSiteTests\obj\Debug\netcoreapp2.1\PersonalProjectSiteTests.dll
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSiteTests\obj\Debug\netcoreapp2.1\PersonalProjectSiteTests.pdb
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSiteTests\bin\Debug\netcoreapp2.1\wwwroot\FlappyBirdGame\Build\WebGL.json

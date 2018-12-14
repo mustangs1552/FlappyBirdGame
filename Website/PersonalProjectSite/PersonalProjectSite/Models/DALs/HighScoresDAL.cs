@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using PersonalProjectSite.Models;
+using Utilities;
 
 namespace PersonalProjectSite.Models.DALs
 {

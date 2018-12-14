@@ -2,14 +2,19 @@
 using System.Data.SqlClient;
 using System.Collections.Generic;
 
-namespace PersonalProjectSite.Models
+namespace Utilities
 {
+    /// <summary>
+    /// Class of utilities for executing SQL queries.
+    /// </summary>
     public static class SQLUtilities
     {
         /// <summary>
         /// Executes a non-parameterized query and returns result.
         /// </summary>
+        /// <param name="connString">The database connection string.</param>
         /// <param name="sqlString">The SQL string to execute.</param>
+        /// <param name="PopulateFunc">The function to use to populate the list of models.</param>
         /// <returns>The list of models found.</returns>
         public static List<T> PerformSQL<T>(string connString, string sqlString, Func<SqlDataReader, List<T>> PopulateFunc)
         {
@@ -18,8 +23,10 @@ namespace PersonalProjectSite.Models
         /// <summary>
         /// Executes a parameterized query and returns result.
         /// </summary>
+        /// <param name="connString">The database connection string.</param>
         /// <param name="sqlString">The SQL string to execute.</param>
         /// <param name="parameters">Dictionary of the parameters in the format: Key=@param, Value=value.</param>
+        /// <param name="PopulateFunc">The function to use to populate the list of models.</param>
         /// <returns>The list of models found.</returns>
         public static List<T> PerformSQL<T>(string connString, string sqlString, Dictionary<string, Object> parameters, Func<SqlDataReader, List<T>> PopulateFunc)
         {
@@ -29,9 +36,11 @@ namespace PersonalProjectSite.Models
         /// <summary>
         /// Executes a parameterized query and returns result if the sqlString begins with "SELECT" otherwise will update rowsAddected with SQL rows affected.
         /// </summary>
+        /// <param name="connString">The database connection string.</param>
         /// <param name="sqlString">The SQL string to execute.</param>
         /// <param name="parameters">Dictionary of the parameters in the format: Key=@param, Value=value.</param>
         /// <param name="rowsAffected">SQL rows affected.</param>
+        /// <param name="PopulateFunc">The function to use to populate the list of models (Optional if not expecting a query back).</param>
         /// <returns>The list of models found.</returns>
         public static List<T> PerformSQL<T>(string connString, string sqlString, Dictionary<string, Object> parameters, out int rowsAffected, Func<SqlDataReader, List<T>> PopulateFunc = null)
         {

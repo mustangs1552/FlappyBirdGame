@@ -56,8 +56,6 @@ D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProject
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.pdb
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\PersonalProjectSite.csproj.CopyComplete
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\bin\Debug\netcoreapp2.1\wwwroot\FlappyBirdGame\Build\WebGL.json
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\PlayGame\Index.g.cshtml.cs
-D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\PlayGame\Index_INTERNAL.g.cshtml.cs
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\About.g.cshtml.cs
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\Contact.g.cshtml.cs
 D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\Index.g.cshtml.cs
@@ -70,3 +68,5 @@ C:\Users\Matthew George\Documents\Workspace\PersonalProject\FlappyBirdGame\Websi
 C:\Users\Matthew George\Documents\Workspace\PersonalProject\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\HomeDEFAULT\Privacy.g.cshtml.cs
 C:\Users\Matthew George\Documents\Workspace\PersonalProject\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\PlayGame\Index.g.cshtml.cs
 C:\Users\Matthew George\Documents\Workspace\PersonalProject\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\PlayGame\Index_INTERNAL.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Game\Index.g.cshtml.cs
+D:\SourcetreeProjects\FlappyBirdGame\Website\PersonalProjectSite\PersonalProjectSite\obj\Debug\netcoreapp2.1\Razor\Views\Game\Index_INTERNAL.g.cshtml.cs

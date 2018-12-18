@@ -4,7 +4,7 @@ using PersonalProjectSite.Models.DALs;
 
 namespace PersonalProjectSite.Controllers
 {
-    public class PlayGameController : Controller
+    public class GameController : Controller
     {
         private const string connString = @"Data Source=.\SQLEXPRESS;Initial Catalog=PersonalGameSite;Integrated Security=true;";
 

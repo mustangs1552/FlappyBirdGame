@@ -16,7 +16,7 @@ namespace Utilities
         /// <param name="sqlString">The SQL string to execute.</param>
         /// <param name="PopulateFunc">The function to use to populate the list of models.</param>
         /// <returns>The list of models found.</returns>
-        public static List<T> PerformSQL<T>(string connString, string sqlString, Func<SqlDataReader, List<T>> PopulateFunc)
+        public static List<T> PerformSQL<T>(string connString, string sqlString, Func<SqlDataReader, T> PopulateFunc)
         {
             return (List<T>)Convert.ChangeType(PerformSQL<T>(connString, sqlString, null, PopulateFunc), typeof(List<T>));
         }
@@ -28,7 +28,7 @@ namespace Utilities
         /// <param name="parameters">Dictionary of the parameters in the format: Key=@param, Value=value.</param>
         /// <param name="PopulateFunc">The function to use to populate the list of models.</param>
         /// <returns>The list of models found.</returns>
-        public static List<T> PerformSQL<T>(string connString, string sqlString, Dictionary<string, Object> parameters, Func<SqlDataReader, List<T>> PopulateFunc)
+        public static List<T> PerformSQL<T>(string connString, string sqlString, Dictionary<string, Object> parameters, Func<SqlDataReader, T> PopulateFunc)
         {
             int temp = -1;
             return (List<T>)Convert.ChangeType(PerformSQL<T>(connString, sqlString, parameters, out temp, PopulateFunc), typeof(List<T>));
@@ -42,7 +42,7 @@ namespace Utilities
         /// <param name="rowsAffected">SQL rows affected.</param>
         /// <param name="PopulateFunc">The function to use to populate the list of models (Optional if not expecting a query back).</param>
         /// <returns>The list of models found.</returns>
-        public static List<T> PerformSQL<T>(string connString, string sqlString, Dictionary<string, Object> parameters, out int rowsAffected, Func<SqlDataReader, List<T>> PopulateFunc = null)
+        public static List<T> PerformSQL<T>(string connString, string sqlString, Dictionary<string, Object> parameters, out int rowsAffected, Func<SqlDataReader, T> PopulateFunc = null)
         {
             try
             {
@@ -61,7 +61,16 @@ namespace Utilities
                     if (sqlString.Substring(0, 6).ToUpper() == "SELECT")
                     {
                         rowsAffected = -1;
-                        if (PopulateFunc != null) return (List<T>)Convert.ChangeType(PopulateFunc(cmd.ExecuteReader()), typeof(List<T>));
+                        if (PopulateFunc != null)
+                        {
+                            List<T> output = new List<T>();
+                            SqlDataReader reader = cmd.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                output.Add(PopulateFunc(reader));
+                            }
+                            return output;
+                        }
                         else return new List<T>();
                     }
                     else

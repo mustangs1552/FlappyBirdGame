@@ -17,7 +17,7 @@ namespace PersonalProjectSite.Models.DALs
         {
             connString = connectionString;
         }
-        
+
         /// <summary>
         /// Gets all the games in the database.
         /// </summary>
@@ -42,7 +42,7 @@ namespace PersonalProjectSite.Models.DALs
         /// <returns>The game found.</returns>
         public GamesModel GetGame(string name)
         {
-            if(name == null)
+            if (name == null)
             {
                 return new GamesModel();
             }
@@ -61,11 +61,11 @@ namespace PersonalProjectSite.Models.DALs
         /// <returns>The number of SQL rows affected.</returns>
         public int AddGame(GamesModel model)
         {
-            if(model == null)
+            if (model == null)
             {
                 return 0;
             }
-            if(model.GameName == null || model.GameName == "")
+            if (model.GameName == null || model.GameName == "")
             {
                 return 0;
             }
@@ -90,26 +90,21 @@ namespace PersonalProjectSite.Models.DALs
             SQLUtilities.PerformSQL<GamesModel>(connString, SQL_ADD_GAME, parameters, out rowsAffected);
             return rowsAffected;
         }
-        
+
         /// <summary>
         /// Populates a list of models via the SqlDataReader provided.
         /// </summary>
         /// <param name="reader">The SqlDataReader to get the list from.</param>
         /// <returns>List of models.</returns>
-        private List<GamesModel> PopulateList(SqlDataReader reader)
+        private GamesModel PopulateList(SqlDataReader reader)
         {
-            List<GamesModel> output = new List<GamesModel>();
-            while(reader.Read())
-            {
-                GamesModel model = new GamesModel();
-                model.GameID = Convert.ToInt32(reader["gameID"]);
-                model.GameName = Convert.ToString(reader["gameName"]);
-                model.GameType = Convert.ToInt32(reader["gameTypeID"]);
-                model.GameDescription = Convert.ToString(reader["gameDiscription"]);
-                model.GameSrc = Convert.ToString(reader["gameSrc"]);
-                output.Add(model);
-            }
-            return output;
+            GamesModel model = new GamesModel();
+            model.GameID = Convert.ToInt32(reader["gameID"]);
+            model.GameName = Convert.ToString(reader["gameName"]);
+            model.GameType = Convert.ToInt32(reader["gameTypeID"]);
+            model.GameDescription = Convert.ToString(reader["gameDiscription"]);
+            model.GameSrc = Convert.ToString(reader["gameSrc"]);
+            return model;
         }
     }
 }

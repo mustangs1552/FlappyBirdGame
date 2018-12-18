@@ -43,7 +43,7 @@ namespace PersonalProjectSite.Models.DALs
         }
         public List<HighScoresModel> GetAllHighScores(string name)
         {
-            if(name == null)
+            if (name == null)
             {
                 return new List<HighScoresModel>();
             }
@@ -71,11 +71,11 @@ namespace PersonalProjectSite.Models.DALs
 
         public int AddHighScore(HighScoresModel model)
         {
-            if(model == null)
+            if (model == null)
             {
                 return 0;
             }
-            if(model.ScoreUsername == null || model.ScoreUsername == "")
+            if (model.ScoreUsername == null || model.ScoreUsername == "")
             {
                 return 0;
             }
@@ -91,24 +91,19 @@ namespace PersonalProjectSite.Models.DALs
             SQLUtilities.PerformSQL<HighScoresModel>(connString, SQL_ADD_HIGHSCORE, parameters, out rowsAffected);
             return rowsAffected;
         }
-        
+
         /// <summary>
         /// Populates a list of models via the SqlDataReader provided.
         /// </summary>
         /// <param name="reader">The SqlDataReader to get the list from.</param>
         /// <returns>List of models.</returns>
-        private List<HighScoresModel> PopulateList(SqlDataReader reader)
+        private HighScoresModel PopulateList(SqlDataReader reader)
         {
-            List<HighScoresModel> output = new List<HighScoresModel>();
-            while (reader.Read())
-            {
-                HighScoresModel model = new HighScoresModel();
-                model.GameID = Convert.ToInt32(reader["gameID"]);
-                model.ScoreUsername = Convert.ToString(reader["scoreUsername"]);
-                model.Score = Convert.ToInt32(reader["score"]);
-                output.Add(model);
-            }
-            return output;
+            HighScoresModel model = new HighScoresModel();
+            model.GameID = Convert.ToInt32(reader["gameID"]);
+            model.ScoreUsername = Convert.ToString(reader["scoreUsername"]);
+            model.Score = Convert.ToInt32(reader["score"]);
+            return model;
         }
     }
 }

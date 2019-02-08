@@ -237,6 +237,11 @@ Prefab:
       propertyPath: rootDomainURL
       value: http://localhost:56603/
       objectReference: {fileID: 0}
+    - target: {fileID: 114742459673520108, guid: 53f51cc6d4a63e5469916ca842c1863b,
+        type: 2}
+      propertyPath: siteAccess
+      value: 
+      objectReference: {fileID: 588724649}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53f51cc6d4a63e5469916ca842c1863b, type: 2}
   m_IsPrefabAsset: 0
@@ -246,6 +251,24 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1030366775}
   m_Script: {fileID: 11500000, guid: b1a60cebac5ea8644b33e05d73631204, type: 3}
+--- !u!1 &588724648 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1932265962762956, guid: d66f78e97854cd14a9a62ad6a93012ab,
+    type: 2}
+  m_PrefabInternal: {fileID: 1030366775}
+--- !u!114 &588724649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 588724648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae9974edadce5d6449f03a7c4e5b6a93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverGameID: 2
+  isDebug_PortfolioSiteAccess: 1
 --- !u!1 &835752522
 GameObject:
   m_ObjectHideFlags: 0

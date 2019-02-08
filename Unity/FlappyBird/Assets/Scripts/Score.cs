@@ -3,11 +3,13 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using MattRGeorge;
 
 namespace Assets.Scripts
 {
     public class Score : MonoBehaviour
     {
+        public PortfolioSiteAccess siteAccess = null;
         public string rootDomainURL = "https://localhost:44390/";
         public string uploadScoreURL = "HighScores/SaveNewScore";
         public uint serverGameID = 0;
@@ -29,7 +31,8 @@ namespace Assets.Scripts
 
         public void StartUploadScore(string username)
         {
-            if(uploadScoreURL == null || uploadScoreURL == "")
+            siteAccess.StartUploadScore(username, "Points", amount);
+            /*if(uploadScoreURL == null || uploadScoreURL == "")
             {
                 Debug.LogError("No high score URL set!");
             }
@@ -38,7 +41,7 @@ namespace Assets.Scripts
                 StartCoroutine("UploadScore", username);
             }
 
-            PlayerPrefs.SetString("latestUsername", username);
+            PlayerPrefs.SetString("latestUsername", username);*/
         }
 
         private IEnumerator UploadScore(string username)

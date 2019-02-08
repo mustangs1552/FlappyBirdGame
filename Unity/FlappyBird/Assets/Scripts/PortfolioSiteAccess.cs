@@ -17,11 +17,18 @@ namespace MattRGeorge
     {
         #region variables
         #region Public
+        [Tooltip("The ID of the game in the site's database.")]
         [SerializeField] private int serverGameID = 0;
         #endregion
 
         #region Properties
-
+        public List<string> SupportedScoreTypes
+        {
+            get
+            {
+                return supportedScoreTypes;
+            }
+        }
         #endregion
 
         #region private
@@ -37,6 +44,12 @@ namespace MattRGeorge
 
         #region Functions
         #region Public
+        /// <summary>
+        /// Start uploading the given score to the site.
+        /// </summary>
+        /// <param name="user">The username for the score.</param>
+        /// <param name="type">The type of score (Points, Seconds, etc...).</param>
+        /// <param name="score">The score value.</param>
         public void StartUploadScore(string user, string type, int score)
         {
             if (supportedScoreTypes == null || supportedScoreTypes.Count == 0 || user == null || user == "" || type == null || type == "") return;
@@ -61,12 +74,27 @@ namespace MattRGeorge
         #endregion
 
         #region Private
+        /// <summary>
+        /// Gets the list of supported score types from the site.
+        /// </summary>
         private void GetSupportedScoreTypes()
         {
+            supportedScoreTypes = new List<string>();
             supportedScoreTypes.Add("Points");
-            //PrintErrorDebugMsg_PortfolioSiteAccess("No supported score types found!");
+
+            if(supportedScoreTypes == null || supportedScoreTypes.Count == 0) PrintErrorDebugMsg_PortfolioSiteAccess("No supported score types found!");
+            else
+            {
+                string debugStr = "Supported score types received (" + supportedScoreTypes.Count + "):";
+                foreach (string type in supportedScoreTypes) debugStr += "\n\t- " + type;
+                PrintDebugMsg_PortfolioSiteAccess(debugStr);
+            }
         }
 
+        /// <summary>
+        /// Uploads the given score to the site.
+        /// </summary>
+        /// <param name="data">The score information to be uploaded.</param>
         private IEnumerator UploadScore(ScoreData data)
         {
             List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
@@ -139,13 +167,13 @@ namespace MattRGeorge
         }
         #endregion
         #endregion
-    }
 
-    public class ScoreData
-    {
-        public string username = "";
-        public string scoreType = "";
-        public int amount = 0;
+        private class ScoreData
+        {
+            public string username = "";
+            public string scoreType = "";
+            public int amount = 0;
+        }
     }
 
     public class AcceptAllSelfSignedCerts : CertificateHandler

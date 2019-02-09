@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using UnityEngine.Networking;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -77,12 +78,25 @@ namespace MattRGeorge
         /// <summary>
         /// Gets the list of supported score types from the site.
         /// </summary>
-        private void GetSupportedScoreTypes()
+        private IEnumerator GetSupportedScoreTypes()
         {
-            supportedScoreTypes = new List<string>();
-            supportedScoreTypes.Add("Points");
+            using (UnityWebRequest www = UnityWebRequest.Get(ROOT_DOMAIN_URL + SCORES_CONTROLLER + GET_SCORE_TYPES_URL))
+            {
+                //www.certificateHandler = new AcceptAllSelfSignedCerts();
+                PrintDebugMsg_PortfolioSiteAccess("Getting score types...");
+                yield return www.SendWebRequest();
 
-            if(supportedScoreTypes == null || supportedScoreTypes.Count == 0) PrintErrorDebugMsg_PortfolioSiteAccess("No supported score types found!");
+                if (www.isNetworkError || www.isHttpError) PrintErrorDebugMsg_PortfolioSiteAccess("Error while getting score types: " + www.error + "\n\tURL: " + www.url);
+                else
+                {
+                    PrintDebugMsg_PortfolioSiteAccess("Received score types! JSON:\n" + www.downloadHandler.text);
+
+                    supportedScoreTypes = new List<string>();
+                    supportedScoreTypes = ParseJSONArray(www.downloadHandler.text);
+                }
+            }
+
+            if (supportedScoreTypes == null || supportedScoreTypes.Count == 0) PrintErrorDebugMsg_PortfolioSiteAccess("No supported score types found!");
             else
             {
                 string debugStr = "Supported score types received (" + supportedScoreTypes.Count + "):";
@@ -109,10 +123,7 @@ namespace MattRGeorge
                 PrintDebugMsg_PortfolioSiteAccess("Uploading score...\n\tUsername: " + data.username + "\n\tScore Type: " + data.scoreType + "\n\tScore: " + data.amount);
                 yield return www.SendWebRequest();
 
-                if (www.isNetworkError || www.isHttpError)
-                {
-                    PrintErrorDebugMsg_PortfolioSiteAccess("Error while uploading score: " + www.error + "\n\tURL: " + www.url);
-                }
+                if (www.isNetworkError || www.isHttpError) PrintErrorDebugMsg_PortfolioSiteAccess("Error while uploading score: " + www.error + "\n\tURL: " + www.url);
                 else PrintDebugMsg_PortfolioSiteAccess("Uploaded score!");
             }
         }
@@ -120,6 +131,31 @@ namespace MattRGeorge
         {
 
         }*/
+        
+        /// <summary>
+        /// Parses a section of a JSON object that represents one array of strings.
+        /// </summary>
+        /// <param name="jsonArrayText">Section of JSON that is an array of strings.</param>
+        /// <returns>A list containing the parsed array.</returns>
+        private List<string> ParseJSONArray(string jsonArrayText)
+        {
+            List<string> parsedArray = new List<string>();
+            bool read = false;
+            string currIndex = "";
+            foreach(char c in jsonArrayText)
+            {
+                if (c == '"' && read)
+                {
+                    parsedArray.Add(currIndex);
+                    currIndex = "";
+                    read = false;
+                }
+                else if (c == '"') read = true;
+                else if(read) currIndex += c;
+            }
+
+            return parsedArray;
+        }
         #endregion
         #endregion
 
@@ -130,7 +166,7 @@ namespace MattRGeorge
 
             if (serverGameID <= 0) PrintErrorDebugMsg_PortfolioSiteAccess("Server game ID is not set!");
 
-            GetSupportedScoreTypes();
+            StartCoroutine("GetSupportedScoreTypes");
         }
         #endregion
 

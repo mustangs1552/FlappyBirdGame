@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverGameID: 2
-  isDebug_PortfolioSiteAccess: 1
+  isDebug_PortfolioSiteAccess: 0
 --- !u!1 &835752522
 GameObject:
   m_ObjectHideFlags: 0

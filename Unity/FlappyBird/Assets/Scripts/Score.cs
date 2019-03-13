@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using MattRGeorge;
+using MattRGeorge.PortfolioSiteAccess;
 
 namespace Assets.Scripts
 {
     public class Score : MonoBehaviour
     {
-        public PortfolioSiteAccess siteAccess = null;
+        public ScoreAccess siteAccess = null;
         public bool isDebug = false;
 
         private int amount = 0;

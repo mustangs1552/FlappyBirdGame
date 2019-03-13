@@ -8,13 +8,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using MattRGeorge.Utilities;
 
-namespace MattRGeorge
+namespace MattRGeorge.PortfolioSiteAccess
 {
     /// <summary>
     /// Used to access various functions on the portfolio site at MattRGeorge.com such as score and logging in/out (no logging in/out).
     /// </summary>
-    public class PortfolioSiteAccess : MonoBehaviour
+    public class ScoreAccess : MonoBehaviour
     {
         #region variables
         #region Public
@@ -158,9 +159,8 @@ namespace MattRGeorge
                 else
                 {
                     PrintDebugMsg_PortfolioSiteAccess("Received score types! JSON:\n" + www.downloadHandler.text);
-
-                    supportedScoreTypes = new List<string>();
-                    supportedScoreTypes = ParseJSONArray(www.downloadHandler.text);
+                    
+                    supportedScoreTypes = JSONParser.ParseJSON(www.downloadHandler.text).valueArrays["ROOT_ARRAY"];
                 }
             }
 
@@ -220,73 +220,13 @@ namespace MattRGeorge
                     {
                         PrintDebugMsg_PortfolioSiteAccess("Received scores! JSON:\n" + www.downloadHandler.text);
 
-                        List<string> extractedJSONs = ExtractJSONFromArray(www.downloadHandler.text);
                         List<ScoreValue> scores = new List<ScoreValue>();
-                        foreach (string json in extractedJSONs) scores.Add(JsonUtility.FromJson<ScoreValue>(json));
+                        JSONObject parsedJSON = JSONParser.ParseJSON(www.downloadHandler.text);
+                        foreach (JSONObject obj in parsedJSON.objArrays["ROOT_ARRAY"]) scores.Add(new ScoreValue(obj));
                         if(!data.OnGotScores(scores)) PrintWarningDebugMsg_PortfolioSiteAccess("OnGetScores callback failed for some reason!");
                     }
                 }
             }
-        }
-        
-        /// <summary>
-        /// Extracts each object within an array of a JSON string.
-        /// </summary>
-        /// <param name="jsonArrayText">The array of objects in JSON format.</param>
-        /// <returns>A list of JSON objects in their JSON format.</returns>
-        private List<string> ExtractJSONFromArray(string jsonArrayText)
-        {
-            List<string> parsedArray = new List<string>();
-            bool read = false;
-            string currIndex = "";
-            int currBracketCount = 0;
-            foreach (char c in jsonArrayText)
-            {
-                if(c == '{')
-                {
-                    currBracketCount++;
-                    currIndex += c;
-                    read = true;
-                }
-                else if(c == '}' && read)
-                {
-                    currBracketCount--;
-                    currIndex += c;
-                    if (currBracketCount == 0)
-                    {
-                        parsedArray.Add(currIndex);
-                        currIndex = "";
-                        read = false;
-                    }
-                }
-                else if(read) currIndex += c;
-            }
-
-            return parsedArray;
-        }
-        /// <summary>
-        /// Parses a section of a JSON object that represents one array of strings.
-        /// </summary>
-        /// <param name="jsonArrayText">Section of JSON that is an array of strings.</param>
-        /// <returns>A list containing the parsed array.</returns>
-        private List<string> ParseJSONArray(string jsonArrayText)
-        {
-            List<string> parsedArray = new List<string>();
-            bool read = false;
-            string currIndex = "";
-            foreach(char c in jsonArrayText)
-            {
-                if (c == '"' && read)
-                {
-                    parsedArray.Add(currIndex);
-                    currIndex = "";
-                    read = false;
-                }
-                else if (c == '"') read = true;
-                else if(read) currIndex += c;
-            }
-
-            return parsedArray;
         }
         #endregion
         #endregion
@@ -296,7 +236,7 @@ namespace MattRGeorge
         {
             PrintDebugMsg_PortfolioSiteAccess("Debugging enabled.");
 
-            if (serverGameID <= 0) PrintErrorDebugMsg_PortfolioSiteAccess("Server game ID is not set!");
+            if (serverGameID <= 0) PrintErrorDebugMsg_PortfolioSiteAccess("Server game ID must be 1 or greater!");
 
             StartCoroutine("GetSupportedScoreTypes");
         }
@@ -351,7 +291,6 @@ namespace MattRGeorge
     /// <summary>
     /// The values of a score object from the server.
     /// </summary>
-    [Serializable]
     public class ScoreValue
     {
         public int id = 0;
@@ -359,6 +298,19 @@ namespace MattRGeorge
         public string playerName = "";
         public string scoreType = "";
         public string scoreAmount = "";
+
+        public ScoreValue()
+        {
+
+        }
+        public ScoreValue(JSONObject parsedJSON)
+        {
+            int.TryParse(parsedJSON.values["id"], out id);
+            int.TryParse(parsedJSON.values["projectID"], out projectID);
+            playerName = parsedJSON.values["playerName"];
+            scoreType = parsedJSON.values["scoreType"];
+            scoreAmount = parsedJSON.values["scoreAmount"];
+        }
     }
 
     public class AcceptAllSelfSignedCerts : CertificateHandler

@@ -242,6 +242,11 @@ Prefab:
       propertyPath: siteAccess
       value: 
       objectReference: {fileID: 588724649}
+    - target: {fileID: 114742459673520108, guid: 53f51cc6d4a63e5469916ca842c1863b,
+        type: 2}
+      propertyPath: isDebug
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53f51cc6d4a63e5469916ca842c1863b, type: 2}
   m_IsPrefabAsset: 0

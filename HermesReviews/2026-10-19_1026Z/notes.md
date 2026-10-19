@@ -42,7 +42,7 @@ confirmed:
 ## One thing the lanes did not catch, checked and cleared by the root
 
 `Unity/FlappyBird/ProjectSettings/ProjectSettings.asset:495` contains
-`psp2PackagePassword: F69AzBlax3CF3EDNhm3soLBPh71Yexui`, which any credential scanner will flag. It
+`psp2PackagePassword: F69A…exui (32 chars)`, which any credential scanner will flag. It
 is **not a secret**: it sits in an otherwise entirely blank PS Vita platform block
 (`psp2NPCommsPassphrase`, `psp2PatchOriginalPackage`, `psp2KeystoneFile` all empty), alongside
 `metroCertificatePassword:` (empty) and `metroPackageName: Template_2D`. It is the stock Unity 2D

@@ -1,0 +1,67 @@
+# FlappyBirdGame -- Security Review (t_af68f023)
+
+- Repo: `mustangs1552/FlappyBirdGame`
+- Pinned commit: `4a5d09c0c6daa13fc84eb05aed706c23845f04e6` (2019-03-13T01:06:25Z, Matthew George) -- verified at HEAD of review clone
+- Scope: injection (SQL, command, path traversal), unsafe deserialization, auth/authz flaws, insecure defaults, unsafe file/network handling, memory-safety / crash-on-untrusted-input, exploitable logic bugs
+- Method: strictly read-only. All hand-written source read in full; asset/config/binary/compiled artifacts reviewed by targeted search. No code modified, no issues/PRs touched.
+
+The repo has two parts: a Unity 2018.3 WebGL game (client) and an ASP.NET Core 2.1 website (server, `Website/PersonalProjectSite`) backed by SQL Server (`Database/PersonalGameSite.sql`). The server is where nearly all risk lives.
+
+## Findings
+
+### 1. Unauthenticated, unvalidated score-insert endpoint -- leaderboard data integrity
+- Severity: High (impact scales with deployment reality; on a live public site this is effectively an integrity compromise of the site's only user-facing data)
+- File: `Website/PersonalProjectSite/PersonalProjectSite/Controllers/HighScoresController.cs` lines 11-24, together with `Models/DALs/HighScoresDAL.cs` lines 72-93 and `Utilities/SQLUtilities.cs` line 61
+- What is wrong: `POST /HighScores/SaveNewScore?gameID=&username=&score=` is fully public. There is no authentication or authorization anywhere in the project (no `[Authorize]`, no identity setup), no rate limiting, and no validation that `username` is well-formed or that `score` is a plausible game result. Anyone (or any bot) can insert any number of rows with any username/score -- the leaderboard can be flooded, spoofed, or scraped trivially. The only input checks anywhere in the write path are `username` non-empty (DAL line 78) and `int.Parse` on `gameID`/`score` (which throws `FormatException` -> 500 on malformed input).
+- Context: `SQL_ADD_HIGHSCORE` (`HighScoresDAL.cs` line 16) does use `@gameID/@scoreUsername/@score` parameters, and `SQLUtilities.PerformSQL` (line 61) routes INSERT statements through `ExecuteNonQuery` -- so this endpoint is not SQL-injectable (see Finding 6). The problem is pure missing auth/validation.
+- Concrete fix: at minimum add an anti-abuse gate on the write path: require a server-verified game-session token (signed HMAC issued at game start and validated server-side at submit), bind `score` to session progress server-side, add length/charset validation on `username`, cap score vs. achievable maximum and elapsed play time server-side, and rate-limit per IP/username. Full fix for a real deployment: proper authentication for score submission and a moderation/delete path for the leaderboard.
+
+### 2. No CSRF protection on the state-changing endpoint
+- Severity: Medium
+- File: `Website/PersonalProjectSite/PersonalProjectSite/Startup.cs` lines 35-36 (no `AddAntiforgery`), `Controllers/HighScoresController.cs` line 11 (no `[ValidateAntiForgeryToken]`)
+- What is wrong: the single state-changing action is an MVC POST endpoint with no anti-forgery validation. Any web page the user visits can silently post to `/HighScores/SaveNewScore` (cross-origin form/fetch POST; response unreadable but the write happens regardless). Combined with Finding 1, arbitrary score rows can be inserted from a victim's browser without their knowledge.
+- Context: impact is limited to leaderboard rows (no user accounts/sessions exist to ride on), so Medium rather than High.
+- Concrete fix: add `services.AddAntiforgery()` and `[ValidateAntiForgeryToken]` on the action, and have the game obtain/consume the antiforgery token (or switch the endpoint to token-authenticated per Finding 1).
+
+### 3. Unity client posts scores over plaintext HTTP to a hardcoded URL
+- Severity: Medium (in transit only; no secret at stake, but integrity/confidentiality of submitted data is nil)
+- File: `Unity/FlappyBird/Assets/Scripts/MattRGeorge/PortfolioSiteAccess/ScoreAccess.cs` line 37; request construction at lines 180-197 (upload) and 202-230 (fetches); stale alternate endpoint in `Assets/Prefabs/Player.prefab` line 113 (`https://localhost:44390/HighScores/SaveNewScore/`)
+- What is wrong: `ROOT_DOMAIN_URL = "http://localhost:56300/"` -- all score uploads and reads go over unencrypted HTTP with no certificate validation path at all. In a deployed build this allows passive sniffing and trivially active MITM of the score stream. The stale `Player.prefab` serialized field points at a different host/port (`localhost:44390`) and would fail silently if that code path were ever revived.
+- Context: localhost URLs look like dev placeholders, but they are baked constants, not config -- if a build ships with a real host substituted there is no TLS anywhere in the client. Additionally, `AcceptAllSelfSignedCerts` (lines 316-328) is currently dead code (its only instantiation sites, lines 154/190/214, are commented out) -- if ever enabled as-is it contains placeholder logic: `PUBLIC_KEY = "PublicKey"` (line 318) matches a literal string, so "validation" would accept any cert whose public key string equals `"PublicKey"`... which actually returns `false` for real certs, but the class demonstrates the intended failure mode of pinning-vs-accepting without real key material. Flagging because re-enabling it is the obvious next step and it is not safe as written.
+- Concrete fix: use `https://` for `ROOT_DOMAIN_URL`, move the base URL out of code into serialized/scriptable config per environment, delete the stale `uploadScoreURL` field from `Player.prefab`, and either delete `AcceptAllSelfSignedCerts` or implement it as a real pinned public key (compare against the server's actual SPKI, not `"PublicKey"`).
+
+### 4. DB-backed game iframe source rendered without any scheme/origin validation
+- Severity: Medium (Low if the site is truly single-admin)
+- File: `Website/PersonalProjectSite/PersonalProjectSite/Views/Game/Index.cshtml` line 7 (`<iframe src="@Model.GameSrc">`); data inserted via `GamesDAL.AddGame` (`Models/DALs/GamesDAL.cs` lines 62-92) and seeded by `Database/PersonalGameSite.sql`
+- What is wrong: `gameSrc` is stored varchar(255), inserted with zero format validation (only non-null/non-empty checks), and rendered directly as an `iframe src`. There is no stored-XSS issue (Razor encodes attribute values), but whoever can write to `Games` -- today only the DB owner, see Finding 1 caveat -- controls what page loads inside the site's frame: any URL, any scheme (`javascript:` URIs in iframe src execute in some legacy browsers; `data:`/`file:` similarly). Framing the site's own page content from an arbitrary origin also enables clickjacking-style embedding of the game page. Note `gameDescription`/`gameName` are also stored unvalidated but are safe -- plain HTML-encoded output.
+- Concrete fix: validate `gameSrc` on insert (allowlist `https://` absolute URLs to known hosts, reject other schemes), and add `X-Frame-Options: DENY` / `frame-ancestors 'none'` via middleware so third parties cannot frame the site.
+
+### 5. DoS-vulnerable hand-rolled JSON parser on the client; silent `int.TryParse` failure on parsed data
+- Severity: Low (client-only, worst case game crash/hang)
+- File: `Unity/FlappyBird/Assets/Scripts/MattRGeorge/Utilities/JSONParser.cs` -- `ParseJSON` line 222, `ReadObject` lines 132-188, `ReadString` lines 111-124; consumer `ScoreAccess.cs` lines 163, 224-225 and `ScoreValue(JSONObject)` lines 306-313
+- What is wrong: (a) the parser's recursive `ReadObject`/`ReadArray`/`ReadObjectArray` cycle has no depth or input-size limit -- a malicious/corrupt server response with deep `[{[{...` nesting causes unbounded recursion and a stack overflow (client crash), and quadratic string concatenation in `ReadString`/`ReadPrimitiveValue` makes large responses O(n^2) CPU (game hang). The parser also strips JSON escape sequences by ignoring backslashes (`ReadString`), so `\"` inside server strings corrupts parsing -- correctness bug more than security. (b) `ScoreValue(JSONObject)` (line 308-309) silently maps missing/failed `int.TryParse` to `0`, so tampered score/id fields become 0 rather than an error -- cosmetic here, but the pattern would matter if these values drove logic.
+- Context: this only trusts the game's own server response (attacker-controlled only during a MITM, per Finding 3). It is the project's own parser by design (commit "Scores are now using own JSONParser") rather than vulnerable deserialization -- no object graph construction, no `BinaryFormatter`/type-name-based deserialization anywhere in the repo. So Low despite the crash potential.
+- Concrete fix: replace with a bounded parser (depth cap, max input length) or Unity's `JsonUtility`/Newtonsoft; validate parsed fields against expected ranges instead of silently defaulting to 0.
+
+### 6. Minor robustness / hygiene issues (no standalone exploit found)
+- Severity: Low
+- Files/lines:
+  - `Controllers/HighScoresController.cs` lines 17-19: `int.Parse` on untrusted query strings throws unhandled `FormatException` -> 500; the non-SELECT branch of `SQLUtilities.PerformSQL` (line 61) determines statement type by sniffing the first 6 characters, so any future non-parameterized caller passing user text would be silently SQL-injectable -- the current `SQL_ADD_*`/`SQL_GET_*` constants are all parameterized and safe, but the utility's design invites misuse (`PerformSQL` also accepts arbitrary `sqlString` from any caller by design).
+  - `Unity/FlappyBird/Assets/Scripts/UIManager.cs` line 36: `if (inputField.text != null || inputField.text != "")` is always true (`||` instead of `&&`) -- the intended empty-username guard never fires, so empty usernames can be submitted.
+  - `Website/.../Models/GamesModel.cs` line 1 / `HighScoresModel.cs` / `ReviewsModel.cs` / `GameTypesModel.cs`: models use `uint` (CLS-uncompliant, unnecessary) but no security impact.
+- Concrete fix: switch to `&&` on UIManager line 36; use `int.TryParse` in the controller and return 400 on failure; consider deprecating the free-form `PerformSQL(connString, sqlString, ...)` overload in favor of the parameterized one to prevent future misuse.
+
+## Clean in scope (explicitly checked, not an issue)
+- SQL injection: every query string in `GamesDAL`/`HighScoresDAL` is a constant with `@`-parameters bound via `cmd.Parameters.AddWithValue` (`SQLUtilities.cs` lines 52-59). No string-concatenated SQL exists at this commit.
+- Deserialization: no `BinaryFormatter`, no `XmlSerializer`, no type-name-based JSON deserialization; the only parser is the hand-rolled one in Finding 5 (no object-graph/type instantiation).
+- Path traversal / command injection: no `System.IO`, `Process.Start`, or shell invocation in any hand-written code (website or game); no file or network state is written from user input.
+- Secrets: no credentials, API keys, tokens, or real connection strings committed. Connection strings are hardcoded `.\SQLEXPRESS` + Integrated Security (bad practice -- should be configuration, per-infra -- but they contain no secret). `appsettings*.json` contain only log levels; the SQL script creates an empty local dev DB with no data.
+- Auth surface: no login/registration/identity system exists at all, so the only authz finding is Finding 1's missing gate -- nothing like default credentials or misconfigured sessions.
+- Memory safety: entirely managed C#/Unity; no unsafe blocks, pointers, or P/Invoke. The only crash-on-untrusted-input vector is the parser recursion in Finding 5.
+- Committed binaries (`WebGL.data.unityweb`, `.wasm.code.unityweb`, views `.dll/.pdb`, third-party `lib/jquery`, `lib/bootstrap`): not decompiled in this pass (out of scope for a source-level review); the Unity loader/template JS (`UnityLoader.js`, `UnityProgress.js`) was grep-checked for injected URLs/scripts -- only stock engine code found. `bin/`, `obj/`, and third-party `wwwroot/lib` trees are build/vendor artifacts, not hand-written code.
+- Game logic: score counting (`FlappyPlayer.OnTriggerExit2D`, `Score.cs`), pillar spawning, UI flow -- no exploitable logic bug found; the game is client-authoritative by design (which is exactly why Finding 1 exists server-side).
+
+## Scope covered / not covered
+- Covered: all 10 hand-written website controllers/DALs/utilities (end-to-end read), all 8 Unity C# scripts (end-to-end read), Razor views, appsettings/launchSettings/ProjectSettings (targeted), SQL schema, Unity scene/prefab serialized fields (targeted search), committed build JS (targeted search).
+- Not covered: decompilation or deep audit of committed compiled binaries (`bin/`, `obj/`, `.unityweb` payloads) and third-party vendored libraries (`lib/jquery`, `lib/bootstrap`) beyond targeted searches; no dynamic testing (no requests sent); no dependency-CVE audit (note: ASP.NET Core 2.1 and `System.Data.SqlClient 4.5.1` are long-EOL -- operating this site publicly on them would compound Findings 1-2, but that is an operational matter outside this card's scope); no secrets/history scan (that is a separate subtask card).
+- Note for the root card: this codebase's read API surface that the client actually calls (`Scores/GetScores` etc. per `ScoreAccess.cs`) does not exist server-side -- the only live server action is `SaveNewScore` -- so several client paths are dead code; this is a correctness observation, not a security finding.
